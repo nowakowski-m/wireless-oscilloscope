@@ -1,0 +1,4 @@
+--- In final version of project, can change timeout of trying to connect with eth0 for 1s.
+--- It will make the device run faster, because now it's trying to connect with LAN,
+--- even when there is no ethernet cable connected physically.
+--- Now have to leave it like this, for proper internet access, while working on project.
