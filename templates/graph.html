@@ -8,17 +8,17 @@
     <script>
         var eventSource = new EventSource('/data');
         eventSource.onmessage = function(event) {
-            // Parsowanie danych z formatu CSV
+            // Parsing data from CSV.
             var data = event.data.split(',');
             var x = data.slice(0, data.length / 2);
             var y = data.slice(data.length / 2);
 
-            // Sprawdzenie, czy istnieje już wykres i czy jest obiektem typu Chart
+            // Checking if Chart already exists.
             if (window.chart instanceof Chart) {
-                window.chart.destroy(); // Zniszcz istniejący wykres
+                window.chart.destroy(); // If yes, we need to remove existing one.
             }
 
-            // Tworzenie nowego wykresu
+            // Creating new graph.
             var ctx = document.getElementById('chart').getContext('2d');
             window.chart = new Chart(ctx, {
                 type: 'line',
