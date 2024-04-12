@@ -4,40 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PiScope3B - Graph</title>
-    <script src="{{ url_for('static', filename='chart.js') }}"></script>
-    <script>
-        var eventSource = new EventSource('/data');
-        eventSource.onmessage = function(event) {
-            // Parsing data from CSV.
-            var data = event.data.split(',');
-            var x = data.slice(0, data.length / 2);
-            var y = data.slice(data.length / 2);
-
-            // Checking if Chart already exists.
-            if (window.chart instanceof Chart) {
-                window.chart.destroy(); // If yes, we need to remove existing one.
-            }
-
-            // Creating new graph.
-            var ctx = document.getElementById('chart').getContext('2d');
-            window.chart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: x,
-                    datasets: [{
-                        label: 'Dane na żywo',
-                        data: y,
-                        backgroundColor: 'rgba(0, 119, 204, 0.3)',
-                        borderColor: 'rgba(0, 119, 204, 0.8)',
-                        borderWidth: 1
-                    }]
-                }
-            });
-        };
-    </script>
+    <script src="{{ url_for('static', filename='js/chart.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/graph.js') }}"></script>
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/graph.css') }}"> -->
 </head>
 <body>
     <h1>Oscilloscope Graph.</h1>
-    <canvas id="chart"></canvas>
+    <div id="chartContainer" style="height: 670px; width: 60%;">
+        <canvas id="chart"></canvas>
+    </div>
 </body>
 </html>
