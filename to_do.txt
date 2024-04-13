@@ -5,3 +5,6 @@
 
 --- Maybe I can use some other library for plots, like Plotly or D3.js,
 --- which may be better for live updating data.
+
+--- Look for knobs or some other simillar input type, for scaling
+--- scope screen, etc.

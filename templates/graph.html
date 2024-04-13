@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PiScope3B - Graph</title>
-    <script src="{{ url_for('static', filename='js/chart.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lib/chart.js') }}"></script>
     <script src="{{ url_for('static', filename='js/graph.js') }}"></script>
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/graph.css') }}"> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/graph.css') }}">
 </head>
 <body>
     <h1>Oscilloscope Graph.</h1>
-    <div id="chartContainer" style="height: 670px; width: 60%;">
-        <canvas id="chart"></canvas>
-    </div>
+    <canvas id="chartContainer"></canvas>
 </body>
 </html>

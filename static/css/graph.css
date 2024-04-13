@@ -1,20 +1,6 @@
 #chartContainer {
-    width: 100vh;
-    height: 100vh;
-    position: relative;
-}
-
-/* Zmiana koloru tła wykresu */
-#chart {
     background-color: #f5f5f5;
-}
-
-/* Zmiana koloru linii wykresu */
-.chartjs-line {
-    border-color: #0077cc;
-}
-
-/* Ukrycie legendy */
-.chartjs-chart-legend {
-    display: none;
+    width: 50%;
+    height: 50%;
+    position: relative;
 }

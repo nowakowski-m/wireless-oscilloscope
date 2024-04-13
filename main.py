@@ -15,7 +15,7 @@ def generate_data():
     global x_data, y_data
     while True:
         # Simunation of real data.
-        x = np.linspace(0, 10, 100)
+        x = np.linspace(0, 5, 100)
         y = np.sin(x + time.time())
         
         # Assigning data to earlier created lists.
