@@ -11,3 +11,5 @@
 
 --- Rearange graph X scale, to time. It should have max. val. equal to time value set by
 --- range input by user. It should be divided some times, according to frequency of measures.
+
+--- Specify any default scale of Y, according to device limits.

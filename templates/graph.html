@@ -13,7 +13,9 @@
 <body>
     <h1 id="site-title">Oscilloscope Graph.</h1>
     <canvas id="chartContainer"></canvas>
-    <br><label for="customRange3" class="form-label">Voltage scale</label>
-    <input type="range" class="form-range" min="-2" max="2" step="0.1" id="customRange3">
+    <br><label for="voltageRange" class="form-label">Voltage scale</label>
+    <input type="range" class="form-range" min="0" max="5" step="0.1" value="0" id="voltageRange">
+    <br><label for="dcOffset" class="form-label">DC Offset</label>
+    <input type="range" class="form-range" min="0" max="5" step="0.1" value="0" id="dcOffset">
 </body>
 </html>

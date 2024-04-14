@@ -16,7 +16,7 @@ def generate_data():
     while True:
         # Simunation of real data.
         x = np.linspace(0, 5, 100)
-        y = np.sin(x + time.time())
+        y = np.sin(x + time.time()) / 4
         
         # Assigning data to earlier created lists.
         x_data = x
