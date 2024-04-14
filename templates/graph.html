@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PiScope3B - Graph</title>
     <script src="{{ url_for('static', filename='js/lib/chart.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lib/bootstrap.js') }}"></script>
     <script src="{{ url_for('static', filename='js/graph.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/graph.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/lib/bootstrap.css') }}">
 </head>
 <body>
-    <h1>Oscilloscope Graph.</h1>
+    <h1 id="site-title">Oscilloscope Graph.</h1>
     <canvas id="chartContainer"></canvas>
+    <br><label for="customRange3" class="form-label">Voltage scale</label>
+    <input type="range" class="form-range" min="-2" max="2" step="0.1" id="customRange3">
 </body>
 </html>
