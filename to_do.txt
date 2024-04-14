@@ -13,3 +13,5 @@
 --- range input by user. It should be divided some times, according to frequency of measures.
 
 --- Specify any default scale of Y, according to device limits.
+
+--- Add start and pause buttons for measuring.

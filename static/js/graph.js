@@ -1,6 +1,6 @@
 var eventSource = new EventSource('/data');
-var graph_voltage_range = 0;
-var graph_dc_offset = 0;
+var graph_voltage_range = 5; //has to be set to default voltage scale input value
+var graph_dc_offset = 0; //has to be set to default dc offset input value
 
 eventSource.onmessage = function(event) {
     var data = event.data.split(',');
@@ -9,8 +9,8 @@ eventSource.onmessage = function(event) {
 
     var ctx = document.getElementById('chartContainer').getContext('2d');
     
-    document.getElementById('voltageRange').addEventListener('input', function() { graph_voltage_range = this.value;});
-    document.getElementById('dcOffset').addEventListener('input', function() { graph_dc_offset = this.value;});
+    document.getElementById('voltageRange').addEventListener('input', function() { graph_voltage_range = parseFloat(this.value);});
+    document.getElementById('dcOffset').addEventListener('input', function() { graph_dc_offset = parseFloat(this.value);});
 
     if (!window.chart) {
         window.chart = new Chart(ctx, {
@@ -28,8 +28,8 @@ eventSource.onmessage = function(event) {
                 responsive: false,
                 scales: {
                     y: {
-                        suggestedMin: -(graph_voltage_range) + graph_dc_offset,
-                        suggestedMax: graph_voltage_range + graph_dc_offset
+                        min: ((graph_voltage_range * (-1)) + graph_dc_offset),
+                        max: (graph_voltage_range + graph_dc_offset)
                     }
                 }
             }
@@ -37,8 +37,8 @@ eventSource.onmessage = function(event) {
     } else {
         window.chart.data.labels = x;
         window.chart.data.datasets[0].data = y;
-        window.chart.options.scales.y.suggestedMin = -(graph_voltage_range) + graph_dc_offset;
-        window.chart.options.scales.y.suggestedMax = graph_voltage_range + graph_dc_offset;
+        window.chart.options.scales.y.min = ((graph_voltage_range * (-1)) + graph_dc_offset);
+        window.chart.options.scales.y.max = (graph_voltage_range + graph_dc_offset);
         window.chart.update();
     }
 };

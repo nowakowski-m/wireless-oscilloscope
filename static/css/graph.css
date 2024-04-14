@@ -6,7 +6,7 @@
     position: relative;
 }
 
-#voltageRange {
+#voltageRange, #dcOffset {
     margin-left: 1%;
     width: 71%;
 }
