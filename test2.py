@@ -1,9 +1,11 @@
 from flask import Flask, render_template, Response
 import time
+import numpy as np
 import board
 import busio
 import adafruit_ads1x15.ads1115 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
+from scipy.fft import fft
 
 app = Flask(__name__)
 
@@ -20,13 +22,16 @@ ads = ADS.ADS1115(i2c, data_rate=ads_data_rate)
 chan = AnalogIn(ads, ADS.P1)
 
 # Frequency of reading data by app
-frequency = (1/ads_data_rate)
+frequency = 1 / ads_data_rate
 
 # Constant value to convert data from bites to volts
 VOLTAGE_REFERENCE = 4.096  # For ADS1115 using GAIN=1
 
 # Empty list for storing data.
 data_points = []
+
+# Frequency to analyze with FFT
+target_frequency = 50  # Hz
 
 @app.route('/')
 def index():
@@ -55,6 +60,15 @@ def data():
 
             # Converting data to proper format for app
             data_string = f"data: {','.join(map(str, data_points))}\n\n"
+
+            # Perform FFT analysis
+            fft_result = fft(data_points)
+            fft_freq = np.fft.fftfreq(len(data_points), d=frequency)
+            target_freq_index = np.abs(fft_freq - target_frequency).argmin()
+            target_freq_amplitude = np.abs(fft_result[target_freq_index])
+            
+            # Print the amplitude of the target frequency
+            print(f"Amplitude of {target_frequency} Hz: {target_freq_amplitude}")
 
             yield data_string
             time.sleep(frequency)
