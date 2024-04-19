@@ -14,4 +14,4 @@
 
 --- Specify any default scale of Y, according to device limits.
 
---- Add start and pause buttons for measuring.
+--- Add start and pause buttons for measuring to file with real measures.

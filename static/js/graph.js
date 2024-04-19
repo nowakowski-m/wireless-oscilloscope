@@ -2,6 +2,26 @@ var eventSource = new EventSource('/data');
 var graph_voltage_range = 5; //has to be set to default voltage scale input value
 var graph_dc_offset = 0; //has to be set to default dc offset input value
 
+function updateButtonText(flag) {
+    var button = document.getElementById("toggleButton");
+    button.textContent = flag ? "Stop" : "Start";
+}
+
+function toggleFlag() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/toggle_flag", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    // xhr.onload = function () {
+    //     if (xhr.status === 200) {
+    //         var flag = JSON.parse(xhr.responseText).flag;
+    //         updateButtonText(flag);
+    //     }
+    // };
+    
+    xhr.send();
+}
+
 eventSource.onmessage = function(event) {
     var data = event.data.split(',');
     var x = data.slice(0, data.length / 2);

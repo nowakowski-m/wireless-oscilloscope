@@ -16,6 +16,9 @@ ads_data_rate = 250
 # Initializing ADS1115
 ads = ADS.ADS1115(i2c, data_rate=ads_data_rate)
 
+# NEED TO CHECK IF THIS WORKS
+ads.set_conv_mode(3)
+
 # Setting measure channel ADC (AI1)
 chan = AnalogIn(ads, ADS.P1)
 
@@ -24,6 +27,7 @@ frequency = (1/ads_data_rate)
 
 # Constant value to convert data from bites to volts
 VOLTAGE_REFERENCE = 4.096  # For ADS1115 using GAIN=1
+# ALSO CAN CHANGE GAIN, OR ADD SLIDER FOR IT, IDK IF THIS IS THE SAME AS GAIN
 
 # Empty list for storing data.
 data_points = []
