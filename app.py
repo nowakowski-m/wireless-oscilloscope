@@ -1,4 +1,4 @@
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, session
 import time
 import board
 import busio
@@ -6,31 +6,28 @@ import adafruit_ads1x15.ads1115 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
 
 app = Flask(__name__)
+app.secret_key = 'test'
 
-# Initializing I2C
 i2c = busio.I2C(board.SCL, board.SDA)
 
-# Setting data rate
 ads_data_rate = 250
-
-# Initializing ADS1115
 ads = ADS.ADS1115(i2c, data_rate=ads_data_rate)
-
-# NEED TO CHECK IF THIS WORKS
-ads.set_conv_mode(3)
-
-# Setting measure channel ADC (AI1)
 chan = AnalogIn(ads, ADS.P1)
 
-# Frequency of reading data by app
-frequency = (1/ads_data_rate)
 
+
+frequency = (1/ads_data_rate)
+reading_pause = False
 # Constant value to convert data from bites to volts
 VOLTAGE_REFERENCE = 4.096  # For ADS1115 using GAIN=1
 # ALSO CAN CHANGE GAIN, OR ADD SLIDER FOR IT, IDK IF THIS IS THE SAME AS GAIN
-
+    
 # Empty list for storing data.
 data_points = []
+
+def read_session_value(obj: str, default: bool):
+    with app.test_request_context():
+        return session.get(obj, default)
 
 @app.route('/')
 def index():
@@ -43,7 +40,7 @@ def graph():
 @app.route('/data')
 def data():
     def generate():
-        while True:
+        while not reading_pause:
             # Reading raw value from ADC
             raw_value = chan.value
 
@@ -64,6 +61,13 @@ def data():
             time.sleep(frequency)
 
     return Response(generate(), mimetype='text/event-stream')
+
+@app.route('/toggle_flag', methods=['POST'])
+def toggle_flag():
+    session['flag'] = not session.get('flag', False)
+    global reading_pause
+    reading_pause = session['flag']
+    return Response('')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=80)

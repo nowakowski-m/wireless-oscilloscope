@@ -14,4 +14,4 @@
 
 --- Specify any default scale of Y, according to device limits.
 
---- Add start and pause buttons for measuring to file with real measures.
+--- Try to move start stop function to some other place, because now it makes just a new chart I guess.
