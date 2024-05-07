@@ -23,7 +23,7 @@ function toggleFlag() {
 }
 
 function getTimeLabel() {
-    fetch('/sampling-frequency') // Wysyłamy żądanie GET do endpointu /sampling-frequency
+    fetch('/sampling-frequency')
     .then(response => response.json())
     .then(data => {
         const samplingFrequency = data.sampling_frequency;
@@ -34,7 +34,7 @@ function getTimeLabel() {
 
         for (let i = 0; i < totalPoints; i++) {
             const time = i * timeStep;
-            labels.push(time.toFixed(3)); // Zaokrąglamy do trzech miejsc po przecinku
+            labels.push(time.toFixed(3));
         }
         return labels;
 
@@ -45,52 +45,8 @@ function getTimeLabel() {
     });
 }
 
-// var label = getTimeLabel();
-// console.log(label);
-
-// eventSource.onmessage = function(event) {
-//     var data = event.data.split(',');
-//     var x = data.slice(0, data.length / 2);
-//     var y = data.slice(data.length / 2);
-
-//     var ctx = document.getElementById('chartContainer').getContext('2d');
-    
-//     document.getElementById('voltageRange').addEventListener('input', function() { graph_voltage_range = parseFloat(this.value);});
-//     document.getElementById('dcOffset').addEventListener('input', function() { graph_dc_offset = parseFloat(this.value);});
-
-//     if (!window.chart) {
-//         window.chart = new Chart(ctx, {
-//             type: 'line',
-//             data: {
-//                 labels: x,
-//                 datasets: [{
-//                     label: 'Data',
-//                     data: y,
-//                     borderWidth: 1,
-//                     borderColor: 'red'
-//                 }]
-//             },
-//             options: {
-//                 responsive: false,
-//                 scales: {
-//                     y: {
-//                         min: ((graph_voltage_range * (-1)) + graph_dc_offset),
-//                         max: (graph_voltage_range + graph_dc_offset)
-//                     }
-//                 }
-//             }
-//         });
-//     } else {
-//         window.chart.data.labels.x = label;
-//         window.chart.data.datasets[0].data = y;
-//         window.chart.options.scales.y.min = ((graph_voltage_range * (-1)) + graph_dc_offset);
-//         window.chart.options.scales.y.max = (graph_voltage_range + graph_dc_offset);
-//         window.chart.update();
-//     }
-// };
-
 function getTimeLabel(callback) {
-    fetch('/sampling-frequency') // Wysyłamy żądanie GET do endpointu /sampling-frequency
+    fetch('/sampling-frequency')
     .then(response => response.json())
     .then(data => {
         const samplingFrequency = data.sampling_frequency;
@@ -101,13 +57,13 @@ function getTimeLabel(callback) {
 
         for (let i = 0; i < totalPoints; i++) {
             const time = i / timeStep;
-            labels.push(time.toFixed(3)); // Zaokrąglamy do trzech miejsc po przecinku
+            labels.push(time.toFixed(3));
         }
         callback(labels);
     })
     .catch(error => {
         console.error('Error:', error);
-        callback([]); // Zwracamy pustą tablicę w przypadku błędu
+        callback([]);
     });
 }
 
