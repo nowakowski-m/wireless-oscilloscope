@@ -1,4 +1,4 @@
-from flask import Flask, render_template, Response, session
+from flask import Flask, render_template, Response, session, jsonify
 import time
 import board
 import busio
@@ -14,8 +14,6 @@ ads_data_rate = 250
 ads = ADS.ADS1115(i2c, data_rate=ads_data_rate)
 chan = AnalogIn(ads, ADS.P1)
 
-
-
 frequency = (1/ads_data_rate)
 reading_pause = False
 # Constant value to convert data from bites to volts
@@ -24,6 +22,7 @@ VOLTAGE_REFERENCE = 4.096  # For ADS1115 using GAIN=1
     
 # Empty list for storing data.
 data_points = []
+graph_points_amount = 51
 
 def read_session_value(obj: str, default: bool):
     with app.test_request_context():
@@ -50,7 +49,7 @@ def data():
             # Adding data to list
             data_points.append(voltage)
 
-            if len(data_points) > 100:
+            if len(data_points) > (graph_points_amount * 2):
                 # If list contain 100 points, delete last one, to leave it always with 100 only
                 data_points.pop(0)
 
@@ -68,6 +67,15 @@ def toggle_flag():
     global reading_pause
     reading_pause = session['flag']
     return Response('')
+
+@app.route('/sampling-frequency')
+def get_sampling_frequency():
+    data = {
+        'sampling_frequency': frequency,
+        'points_amount': graph_points_amount
+    }
+
+    return jsonify(data)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=80)
