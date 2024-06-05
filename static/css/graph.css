@@ -1,22 +1,57 @@
+#container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+}
+
 #chartContainer {
     background-color: #f5f5f5;
     width: 80%;
-    height: 80%;
+    height: 500px;
     margin-left: 1%;
+    margin-top: 1%;
     position: relative;
 }
 
-#voltageRange, #dcOffset {
+#sliders {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 1%;
+    height: 500px; /* Dopasuj wysokość do wykresu */
+}
+
+.slider-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between; /* Rozciągnij suwaki */
+    margin-bottom: 20px; /* Dodaj odstęp między suwakami */
+    height: 100%; /* Dopasuj wysokość kontenera suwaków */
+}
+
+.vertical-slider {
+    writing-mode: bt-lr; /* Ustaw kierunek suwaka pionowo */
+    transform: rotate(270deg); /* Obróć suwak o 270 stopni */
+    height: 80%; /* Dopasuj wysokość suwaka */
+}
+
+#timeScale, #samplingFreq {
     margin-left: 1%;
     width: 71%;
 }
 
-#site-title {
-    margin-left: 1%;
-    margin-top: 1%;
-    font-size: medium;
-}
-
 .form-label {
     margin-left: 1%;
+}
+
+.form-label2 {
+    margin-left: 1%;
+    margin-top: 100px;
+}
+
+#toggleButton {
+    margin-left: 1%;
+    font-size: 16px;
 }

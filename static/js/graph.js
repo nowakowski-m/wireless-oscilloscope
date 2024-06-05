@@ -1,6 +1,6 @@
 var eventSource = new EventSource('/data');
-var graph_voltage_range = 5; //has to be set to default voltage scale input value
-var graph_dc_offset = 0; //has to be set to default dc offset input value
+var graph_voltage_range = 5; // has to be set to default voltage scale input value
+var graph_dc_offset = 0; // has to be set to default dc offset input value
 
 function updateButtonText(flag) {
     var button = document.getElementById("toggleButton");
@@ -11,49 +11,35 @@ function toggleFlag() {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/toggle_flag", true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-    // xhr.onload = function () {
-    //     if (xhr.status === 200) {
-    //         var flag = JSON.parse(xhr.responseText).flag;
-    //         updateButtonText(flag);
-    //     }
-    // };
-    
     xhr.send();
 }
 
-function getTimeLabel() {
-    fetch('/sampling-frequency')
+function setSamplingFreq(value) {
+    document.getElementById('samplingFreqValue').innerText = value; // Aktualizacja wyświetlanej wartości
+    fetch('/set_frequency', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ frequency: value })
+    })
     .then(response => response.json())
     .then(data => {
-        const samplingFrequency = data.sampling_frequency;
-        const totalPoints = data.points_amount;
-
-        const labels = [];
-        const timeStep = 1 / samplingFrequency;
-
-        for (let i = 0; i < totalPoints; i++) {
-            const time = i * timeStep;
-            labels.push(time.toFixed(3));
-        }
-        return labels;
-
+        console.log('Success:', data);
+        initializeChart(); // Reinitialize the chart with new sampling frequency
     })
-    .catch(error => {
-        console.error('Error:', error);
-        return [];
-    });
+    .catch((error) => console.error('Error:', error));
 }
 
 function getTimeLabel(callback) {
-    fetch('/sampling-frequency')
+    fetch('/sampling-period')
     .then(response => response.json())
     .then(data => {
-        const samplingFrequency = data.sampling_frequency;
+        const samplingPeriod = data.sampling_period;
         const totalPoints = data.points_amount;
 
         const labels = [];
-        const timeStep = 1 / (samplingFrequency / 2);
+        const timeStep = 1 / (samplingPeriod / 2);
 
         for (let i = 0; i < totalPoints; i++) {
             const time = i / timeStep;
@@ -71,13 +57,13 @@ function initializeChart() {
     getTimeLabel(function(label) {
         eventSource.onmessage = function(event) {
             var data = event.data.split(',');
-            var x = data.slice(0, data.length / 2);
-            var y = data.slice(data.length / 2);
+            var x = label;
+            var y = data;
 
             var ctx = document.getElementById('chartContainer').getContext('2d');
             
-            document.getElementById('voltageRange').addEventListener('input', function() { graph_voltage_range = parseFloat(this.value);});
-            document.getElementById('dcOffset').addEventListener('input', function() { graph_dc_offset = parseFloat(this.value);});
+            document.getElementById('voltageRange').addEventListener('input', function() { graph_voltage_range = parseFloat(this.value); });
+            document.getElementById('dcOffset').addEventListener('input', function() { graph_dc_offset = parseFloat(this.value); });
 
             if (!window.chart) {
                 window.chart = new Chart(ctx, {
@@ -104,11 +90,18 @@ function initializeChart() {
                                 min: ((graph_voltage_range * (-1)) + graph_dc_offset),
                                 max: (graph_voltage_range + graph_dc_offset)
                             }
-                        }
+                        },
+                        animation: {
+                            duration: 0 // general animation time
+                        },
+                        hover: {
+                            animationDuration: 0 // duration of animations when hovering an item
+                        },
+                        responsiveAnimationDuration: 0 // animation duration after a resize
                     }
                 });
             } else {
-                window.chart.data.labels = label;
+                window.chart.data.labels = x; // Update x-axis labels
                 window.chart.data.datasets[0].data = y;
                 window.chart.options.scales.y.min = ((graph_voltage_range * (-1)) + graph_dc_offset);
                 window.chart.options.scales.y.max = (graph_voltage_range + graph_dc_offset);
