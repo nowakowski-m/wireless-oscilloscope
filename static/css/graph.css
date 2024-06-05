@@ -19,22 +19,22 @@
     flex-direction: column;
     align-items: center;
     margin-left: 1%;
-    height: 500px; /* Dopasuj wysokość do wykresu */
+    height: 500px;
 }
 
 .slider-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between; /* Rozciągnij suwaki */
-    margin-bottom: 20px; /* Dodaj odstęp między suwakami */
-    height: 100%; /* Dopasuj wysokość kontenera suwaków */
+    justify-content: space-between; 
+    margin-bottom: 20px;
+    height: 100%;
 }
 
 .vertical-slider {
-    writing-mode: bt-lr; /* Ustaw kierunek suwaka pionowo */
-    transform: rotate(270deg); /* Obróć suwak o 270 stopni */
-    height: 80%; /* Dopasuj wysokość suwaka */
+    writing-mode: bt-lr;
+    transform: rotate(270deg);
+    height: 80%;
 }
 
 #timeScale, #samplingFreq {

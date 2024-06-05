@@ -16,7 +16,7 @@ chan = AnalogIn(ads, ADS.P1)
 freq = 10
 period = (1 / (ads_data_rate / (freq / 5)))
 
-reading_pause = False
+is_generating = True
 VOLTAGE_REFERENCE = 4.096
 
 data_points = []
@@ -41,7 +41,7 @@ def graph():
 @app.route('/data')
 def data():
     def generate():
-        while not reading_pause:
+        while is_generating:
             raw_value = chan.value
             voltage = (raw_value / 65535) * 8
             data_points.append(voltage)
@@ -58,10 +58,14 @@ def data():
 
 @app.route('/toggle_flag', methods=['POST'])
 def toggle_flag():
-    session['flag'] = not session.get('flag', False)
-    global reading_pause
-    reading_pause = session['flag']
-    return Response('')
+    global is_generating
+    is_generating = not is_generating
+    return jsonify(success=True)
+
+
+@app.route('/get_flag_status', methods=['GET'])
+def get_flag_status():
+    return jsonify(isGenerating=is_generating)
 
 
 @app.route('/sampling-period')

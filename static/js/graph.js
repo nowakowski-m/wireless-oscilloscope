@@ -2,21 +2,39 @@ var eventSource = new EventSource('/data');
 var graph_voltage_range = 5; // has to be set to default voltage scale input value
 var graph_dc_offset = 0; // has to be set to default dc offset input value
 
-function updateButtonText(flag) {
+var isGenerating = true;
+
+function updateButtonText() {
     var button = document.getElementById("toggleButton");
-    button.textContent = flag ? "Stop" : "Start";
+    button.textContent = isGenerating ? "Stop" : "Start";
 }
 
 function toggleFlag() {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/toggle_flag", true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.send();
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            isGenerating = !isGenerating;
+            updateButtonText();
+        }
+    };
+    xhr.send(JSON.stringify({ toggle: true }));
 }
 
+document.addEventListener("DOMContentLoaded", function() {
+    fetch("/get_flag_status")
+        .then(response => response.json())
+        .then(data => {
+            isGenerating = data.isGenerating;
+            updateButtonText();
+        })
+        .catch(error => console.error("Error fetching flag status:", error));
+});
+
 function setSamplingFreq(value) {
-    document.getElementById('samplingFreqValue').innerText = value; // Aktualizacja wyświetlanej wartości
-    fetch('/set_frequency', {
+    document.getElementById('samplingFreqValue').innerText = value;
+        fetch('/set_frequency', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -26,7 +44,7 @@ function setSamplingFreq(value) {
     .then(response => response.json())
     .then(data => {
         console.log('Success:', data);
-        initializeChart(); // Reinitialize the chart with new sampling frequency
+        initializeChart();
     })
     .catch((error) => console.error('Error:', error));
 }
@@ -92,16 +110,16 @@ function initializeChart() {
                             }
                         },
                         animation: {
-                            duration: 0 // general animation time
+                            duration: 0
                         },
                         hover: {
-                            animationDuration: 0 // duration of animations when hovering an item
+                            animationDuration: 0
                         },
-                        responsiveAnimationDuration: 0 // animation duration after a resize
+                        responsiveAnimationDuration: 0
                     }
                 });
             } else {
-                window.chart.data.labels = x; // Update x-axis labels
+                window.chart.data.labels = x;
                 window.chart.data.datasets[0].data = y;
                 window.chart.options.scales.y.min = ((graph_voltage_range * (-1)) + graph_dc_offset);
                 window.chart.options.scales.y.max = (graph_voltage_range + graph_dc_offset);
@@ -112,3 +130,4 @@ function initializeChart() {
 }
 
 initializeChart();
+updateButtonText();
